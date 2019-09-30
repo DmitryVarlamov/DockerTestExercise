@@ -7,21 +7,20 @@ pipeline {
 
 	stages {
 		stage("create docker images"){
+			
 			steps {
-				dir ('folder1/'){
-					sh 'docker build -t hello_html:v1 .'
-				}
-				dir ('folder2/'){
-					sh 'docker build -t vim_ubuntu:v1 .'
-				}
-				dir ('folder3/'){
-					sh 'docker build -t bash_script:v1 .'
-				}
-				dir ('folder4/'){
-					sh 'docker build -t python_time:v1 .'
+				script {
+					def subfolders = sh(returnStdout: true, script:'ls').trim().split(System.getProperty("line.separator"))
+					def size=subfolders.size()
+					for (int i=0;i<size;i++){
+						dir("${subfolders[i]}"){
+							if (fileExists('./Dockerfile')){
+								sh "docker build -t ${subfolders[i]}:v1 ."
+							}
+						}
+					}
 				}
 			}
 		}
 	}
 }
-
