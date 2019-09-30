@@ -1,0 +1,27 @@
+#!groovy
+
+properties([disableConcurrentBuilds()])
+
+pipeline {
+	agent anty
+
+	stages {
+		stage("create docker images"){
+			steps {
+				dir ('folder1/'){
+					sh 'docker build -t hello_html:v1 .'
+				}
+				dir ('folder2/'){
+					sh 'docker build -t vim_ubuntu:v1 .'
+				}
+				dir ('folder3/'){
+					sh 'docker build -t bash_script:v1 .'
+				}
+				dir ('folder4/'){
+					sh 'docker build -t python_time:v1 .'
+				}
+			}
+		}
+	}
+}
+
